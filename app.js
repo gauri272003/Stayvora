@@ -399,9 +399,6 @@
 // ================== LOAD ENV =================
 require("dotenv").config();
 
-console.log("MONGO_URL:", process.env.MONGO_URL);
-console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
-
 // ================== IMPORTS =================
 const express = require("express");
 const app = express();
@@ -434,7 +431,7 @@ const dburl = process.env.MONGO_URL;
 
 async function main() {
   await mongoose.connect(dburl);
-  console.log("Connected to MongoDB");
+  console.log("✅ Connected to MongoDB");
 }
 
 // ================== APP CONFIG =================
@@ -442,7 +439,6 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Middleware order is CRITICAL
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -458,22 +454,23 @@ store.on("error", (err) => {
   console.log("SESSION STORE ERROR:", err);
 });
 
-const sessionOptions = {
-  store,
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // FIXED: Must be Date object
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  },
-};
+app.use(
+  session({
+    store,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
+  })
+);
 
-app.use(session(sessionOptions));
 app.use(flash());
 
-// ================== PASSPORT CONFIG =================
+// ================== PASSPORT =================
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -486,117 +483,6 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user;
-  next();
-});
-
-// ================== IGNORE SOURCE MAP REQUESTS =================
-app.use((req, res, next) => {
-  // Ignore Chrome extension and source map requests
-  if (req.path.includes('.map') || req.path.includes('sourceMap')) {
-    return res.status(204).end();
-  }
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
-require("dotenv").config();
-
-console.log("MONGO_URL:", process.env.MONGO_URL);
-console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
-
-// ================== IMPORTS =================
-const express = require("express");
-const app = express();
-const path = require("path");
-const mongoose = require("mongoose");
-const methodOverride = require("method-override");
-const ejsMate = require("ejs-mate");
-
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
-const flash = require("connect-flash");
-
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-
-// ================== MODELS =================
-const User = require("./models/user.js");
-
-// ================== UTILS =================
-const wrapAsync = require("./utilis/wrapAsync.js");
-const Expresserror = require("./utilis/Expresserror.js");
-
-// ================== ROUTES =================
-const listingsRouter = require("./routes/listing.js");
-const reviewsRouter = require("./routes/review.js");
-const userRouter = require("./routes/user.js");
-
-// ================== DATABASE =================
-const dburl = process.env.MONGO_URL;
-
-async function main() {
-  await mongoose.connect(dburl);
-  console.log("Connected to MongoDB");
-}
-
-// ================== APP CONFIG =================
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
-// Middleware order is CRITICAL
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(methodOverride("_method"));
-
-// ================== SESSION STORE =================
-const store = MongoStore.create({
-  mongoUrl: dburl,
-  touchAfter: 24 * 3600,
-});
-
-store.on("error", (err) => {
-  console.log("SESSION STORE ERROR:", err);
-});
-
-const sessionOptions = {
-  store,
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // FIXED: Must be Date object
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  },
-};
-
-app.use(session(sessionOptions));
-app.use(flash());
-
-// ================== PASSPORT CONFIG =================
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-// ================== GLOBAL MIDDLEWARE =================
-app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.currentUser = req.user;
-  next();
-});
-
-// ================== IGNORE SOURCE MAP REQUESTS =================
-app.use((req, res, next) => {
-  // Ignore Chrome extension and source map requests
-  if (req.path.includes('.map') || req.path.includes('sourceMap')) {
-    return res.status(204).end();
-  }
-  console.log(`${req.method} ${req.path}`);
   next();
 });
 
@@ -605,47 +491,11 @@ app.use("/", userRouter);
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 
-// ================== 404 HANDLER =================
-app.all("*", (req, res, next) => {
-  next(new Expresserror(404, "Page Not Found"));
-});
-
-// ================== ERROR HANDLER =================
-app.use((err, req, res, next) => {
-  console.log("ERROR CAUGHT:", err.message);
-  
-  const { status = 500, message = "Something went wrong" } = err;
-  
-  // Prevent double response
-  if (res.headersSent) {
-    console.log("Headers already sent, delegating to default handler");
-    return next(err);
-  }
-  
-  res.status(status).render("error.ejs", { message });
-});
-
-// ================== START SERVER =================
-main()
-  .then(() => {
-    const PORT = process.env.PORT || 8080;
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log("Database connection error:", err);
-  });
-
+// ================== ROOT TEST =================
 app.get("/", (req, res) => {
   res.send("Stayvora backend is running 🚀");
 });
 
-// ================== ROUTES =================
-app.use("/", userRouter);
-app.use("/listings", listingsRouter);
-app.use("/listings/:id/reviews", reviewsRouter);
-
 // ================== 404 HANDLER =================
 app.all("*", (req, res, next) => {
   next(new Expresserror(404, "Page Not Found"));
@@ -653,16 +503,7 @@ app.all("*", (req, res, next) => {
 
 // ================== ERROR HANDLER =================
 app.use((err, req, res, next) => {
-  console.log("ERROR CAUGHT:", err.message);
-  
   const { status = 500, message = "Something went wrong" } = err;
-  
-  // Prevent double response
-  if (res.headersSent) {
-    console.log("Headers already sent, delegating to default handler");
-    return next(err);
-  }
-  
   res.status(status).render("error.ejs", { message });
 });
 
@@ -671,10 +512,9 @@ main()
   .then(() => {
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.log("Database connection error:", err);
+    console.log("❌ DB connection error:", err);
   });
-
