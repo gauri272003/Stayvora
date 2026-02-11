@@ -1,117 +1,142 @@
 Stayvora
-Stayvora is a full-stack property booking platform inspired by Airbnb. It offers secure user and admin authentication, interactive map integration for location-based searches, and property booking features. This project is open-source and welcomes contributors.
 
+Stayvora is a full-stack property booking platform inspired by Airbnb. It provides secure user and admin authentication, interactive map-based property searches, and seamless booking functionality.
 
-🔧 Tech Stack and Tools
-Backend
-Node.js & Express.js: Used to build the RESTful backend and handle server-side logic.
-Passport.js: For user authentication (signup/login).
-PBKDF2: Hashing algorithm used with salt to securely store passwords.
-Frontend
-EJS Templates: Server-side rendering for dynamic HTML views.
-Bootstrap: For responsive and clean UI/UX design.
-Mapping & Geolocation
-Leaflet.js: Lightweight JS library to display interactive maps.
-OpenStreetMap: Base map tiles for displaying geographical data.
-Nominatim API: For geocoding location names into latitude and longitude.
-Database
-MongoDB Atlas: Cloud-hosted NoSQL database to store user, admin, and property data.
-Deployment
-Render: The app is deployed using Render.
-API Testing
-Hoppscotch: Used to test, debug, and monitor API routes during backend development.
+This project is open-source and welcomes contributions from the community.
+
+🔧 Tech Stack & Tools
+🖥️ Backend
+
+Node.js & Express.js – RESTful API development and server-side logic
+
+Passport.js – User authentication (Signup/Login)
+
+PBKDF2 – Secure password hashing with salt
+
+🎨 Frontend
+
+EJS Templates – Server-side rendering for dynamic views
+
+Bootstrap – Responsive and clean UI/UX design
+
+🗺️ Mapping & Geolocation
+
+Leaflet.js – Interactive map integration
+
+OpenStreetMap – Base map tiles
+
+Nominatim API – Geocoding location names into latitude and longitude
+
+🗄️ Database
+
+MongoDB Atlas – Cloud-hosted NoSQL database
+
+🚀 Deployment
+
+Render – Application hosting and deployment
+
+🧪 API Testing
+
+Hoppscotch – API testing, debugging, and monitoring
+
 ✅ Core Features
-User Authentication
+🔐 User Authentication
 
-Real-time login/signup with Passport.js
-Salted and hashed passwords using PBKDF2 algorithm for extra security
-Separate login flows for users and administrators
-Admin Panel
+Secure signup/login using Passport.js
 
-Add, update, or delete property listings
+Salted & hashed passwords with PBKDF2
+
+Separate authentication flows for users and administrators
+
+🛠️ Admin Panel
+
+Add, update, and delete property listings
+
 Manage user bookings
-User Interface
+
+🏡 User Interface
 
 Browse 50+ active property listings
+
 Book and manage reservations
-Search for properties based on location using a dynamic map
-Map Integration
 
-Interactive map view using Leaflet.js
-Search locations with real-time geocoding via Nominatim API
+Location-based property search
+
+🗺️ Map Integration
+
+Interactive property map using Leaflet.js
+
+Real-time geocoding with Nominatim API
+
 📁 Project Structure
-Yatrabnb-Project/ │ ├── models/ # Mongoose models (User, Property, Admin, etc.) ├── routes/ # Express route handlers ├── views/ # EJS templates ├── public/ # Static files (CSS, JS, images) ├── middleware/ # Custom middlewares (auth, error handlers) ├── utils/ # Utility functions (geocoding, hashing) ├── app.js # Main application file ├── .env # Environment variables (not pushed) └── package.json # Dependencies and scripts
-
-yaml Copy Edit
-
+Stayvora-Project/
+│
+├── models/        # Mongoose models (User, Property, Admin, etc.)
+├── routes/        # Express route handlers
+├── views/         # EJS templates
+├── public/        # Static files (CSS, JS, images)
+├── middleware/    # Custom middlewares (auth, error handling)
+├── utils/         # Utility functions (geocoding, hashing)
+├── app.js         # Main application file
+├── .env           # Environment variables (not pushed to GitHub)
+└── package.json   # Dependencies and scripts
 🖥️ Local Setup Instructions
-Follow these steps to run YatraBnB locally:
 
-1. Clone the Repository
-git clone https://github.com/roshanavatirak/Yatrabnb-Project.git
-cd Yatrabnb-Project
-2. Install Dependencies
-bash
-Copy
-Edit
+Follow these steps to run Stayvora locally:
+
+1️⃣ Clone the Repository
+git clone https://github.com/your-username/Stayvora.git
+cd Stayvora
+
+2️⃣ Install Dependencies
 npm install
-3. Set Up Environment Variables
-Create a .env file in the root directory with the following content:
 
-ini
-Copy
-Edit
-PORT=3000
+3️⃣ Set Up Environment Variables
+
+Create a .env file in the root directory and add:
+
+PORT=8080
 MONGODB_URI=your_mongodb_atlas_uri
 SESSION_SECRET=your_secret_key
-4. Run the Application
-bash
-Copy
-Edit
+
+4️⃣ Run the Application
 npm start
-Access the app at: http://localhost:3000
 
+
+Access the application at:
+
+http://localhost:8080
 🤝 Contributing
-We welcome contributions from the community. Here's how to get started:
 
-Fork the Repository
+Contributions are welcome! Follow the steps below to contribute:
 
-Click on the "Fork" button on the top right of the GitHub repo.
+1️⃣ Fork the Repository
 
-Clone Your Fork
+Click the Fork button at the top-right corner of the repository.
 
-bash
-Copy
-Edit
-git clone https://github.com/your-username/Yatrabnb-Project.git
-cd Yatrabnb-Project
-Create a New Branch
+2️⃣ Clone Your Fork
+git clone https://github.com/your-username/Stayvora.git
+cd Stayvora
 
-bash
-Copy
-Edit
+3️⃣ Create a New Branch
 git checkout -b feature/your-feature-name
-Make Changes and Commit
 
-bash
-Copy
-Edit
+4️⃣ Make Changes and Commit
 git add .
 git commit -m "Add feature: your description"
-Push to Your Fork
 
-bash
-Copy
-Edit
+5️⃣ Push to Your Fork
 git push origin feature/your-feature-name
-Create a Pull Request
 
-Go to the original repo and open a new Pull Request describing your changes.
+6️⃣ Create a Pull Request
 
-All contributors will be credited in the contributors section once merged.
+Go to the original repository and open a Pull Request describing your changes.
+
+All contributors will be credited once their Pull Request is merged.
 
 📧 Contact
-For any queries, suggestions, or collaborations:
+
+For queries, suggestions, or collaboration opportunities:
 
 Gauri Kutarmare
-Email:gkutarmare@gmail.com
+📩 Email: gkutarmare@gmail.com
