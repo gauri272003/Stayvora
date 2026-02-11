@@ -1,24 +1,4 @@
-Yes 😄 I know your Stayvora project — the full-stack Airbnb-inspired property booking platform with:
 
-Node.js + Express
-
-MongoDB Atlas
-
-Passport authentication
-
-PBKDF2 password hashing
-
-Leaflet + OpenStreetMap + Nominatim
-
-EJS templates
-
-Bootstrap
-
-Deployed on Render
-
-Port: 8080
-
-Now I’ll give you a complete professional README.md ready to copy-paste into GitHub 👇
 
 🏠 Stayvora – Full Stack Property Booking Platform
 
